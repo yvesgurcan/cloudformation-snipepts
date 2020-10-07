@@ -1,0 +1,18 @@
+# Create an IAM user with Access Keys to enable automated deployment of an S3 website
+User:
+  Type: "AWS::IAM::User"
+  Properties:
+    Policies:
+      - PolicyName: !Sub "publish-to-${S3Bucket}"
+        PolicyDocument:
+          Statement:
+            - Action: "s3:*"
+              Effect: Allow
+              Resource:
+                - !Sub "arn:aws:s3:::${S3Bucket}"
+                - !Sub "arn:aws:s3:::${S3Bucket}/*"
+
+Credentials:
+  Type: "AWS::IAM::AccessKey"
+  Properties:
+    UserName: !Ref PublishUser
